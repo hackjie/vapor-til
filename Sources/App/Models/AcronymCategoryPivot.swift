@@ -25,3 +25,15 @@ final class AcronymCategoryPivot: PostgreSQLUUIDPivot, ModifiablePivot {
         self.categoryID = try category.requireID()
     }
 }
+
+extension AcronymCategoryPivot: Migration {
+    static func prepare(on connection: PostgreSQLConnection) -> Future<Void> {
+        return Database.create(self, on: connection) { builder in
+            try addProperties(to: builder)
+            
+            // cascade 联级，foreign key constraint
+            builder.reference(from: \.acronymID, to: \Acronym.id, onDelete: .cascade)
+            builder.reference(from: \.categoryID, to: \Category.id, onDelete: .cascade)
+        }
+    }
+}
