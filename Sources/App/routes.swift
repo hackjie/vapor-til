@@ -20,4 +20,8 @@ public func routes(_ router: Router) throws {
     // register user controller
     let usersController = UsersController()
     try router.register(collection: usersController)
+    
+    // register category controller
+    let categoriesController = CategoriesController()
+    try router.register(collection: categoriesController)
 }
